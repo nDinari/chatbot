@@ -1,0 +1,77 @@
+{
+    "intents": [
+      {
+        "tag": "greeting",
+        "patterns": ["Hi", "Hello", "Hey", "Howdy", "Greetings"],
+        "responses": ["Hello! How can I assist you today?", "Hi there! How can I help you?", "Hey! How can I assist you?", "Greetings! What can I do for you?", "Howdy! What can I help you with?"],
+        "context_set": ""
+      },
+      {
+        "tag": "goodbye",
+        "patterns": ["Bye", "Goodbye", "See you later", "Take care", "exit", "quit"],
+        "responses": ["Goodbye! Have a great day!", "See you later! Take care!", "Bye! Come back soon!", "Farewell! Have a wonderful day!", "Take care! See you soon!"],
+        "context_set": ""
+      },
+      {
+        "tag": "thanks",
+        "patterns": ["Thank you", "Thanks a lot", "Thanks!", "Appreciate it"],
+        "responses": ["You're welcome!", "Glad I could help!", "No problem, happy to assist!", "You're welcome! Let me know if there's anything else I can help with.", "No problem! Feel free to ask if you need anything else."],
+        "context_set": ""
+      },
+      {
+        "tag": "product_inquiry",
+        "patterns": ["Can you tell me about [product_name]?", "What are the features of [product_name]?", "I want to know more about [product_name]", "Tell me about [product_name]"],
+        "responses": ["Sure! [product_name] is one of our latest products. It features [features_description].", "Of course! [product_name] comes with [features_description].", "Certainly! [product_name] offers [features_description].", "Absolutely! [product_name] includes [features_description]."],
+        "context_set": ""
+      },
+      {
+        "tag": "order_status",
+        "patterns": ["What's the status of my order?", "Where is my order?", "Can you check my order status?", "I'd like to know the status of my order"],
+        "responses": ["Sure, please provide your order number so I can check the status for you."],
+        "context_set": ""
+      },
+      {
+        "tag": "order_status_provided",
+        "patterns": ["My order number is [order_number]", "Here's my order number: [order_number]"],
+        "responses": ["Thank you! Let me check the status of your order..."],
+        "context_set": ""
+      },
+      {
+        "tag": "order_status_complete",
+        "patterns": [],
+        "responses": ["Your order is [status]. It is expected to be delivered by [delivery_date].", "Your order status is [status]. It should reach you by [delivery_date].", "The status of your order is [status]. It's scheduled for delivery on [delivery_date]."],
+        "context_set": ""
+      },
+      {
+        "tag": "technical_support",
+        "patterns": ["I'm having trouble with [issue]", "Can you help me fix [issue]?", "I need technical support for [issue]"],
+        "responses": ["I'm sorry to hear that you're experiencing issues with [issue]. Let me guide you through some troubleshooting steps.", "Sure, I'll do my best to assist you with [issue].", "No problem, let's work together to resolve [issue]."],
+        "context_set": ""
+      },
+      {
+        "tag": "technical_support_complete",
+        "patterns": [],
+        "responses": ["I hope that resolves the issue. If you need further assistance, feel free to reach out.", "Great! If you encounter any more issues, don't hesitate to contact us.", "Fantastic! If you have any more questions or concerns, just let me know."],
+        "context_set": ""
+      },
+      {
+        "tag": "compliment",
+        "patterns": ["Great job", "You're awesome", "Well done"],
+        "responses": ["Thank you! I'm here to help you whenever you need assistance.", "I appreciate the compliment! Helping you is my priority.", "Thanks! Your satisfaction is what matters most to me."],
+        "context_set": ""
+      },
+      {
+        "tag": "complaint",
+        "patterns": ["I'm not satisfied with", "This is unacceptable", "I want to file a complaint about"],
+        "responses": ["I apologize for the inconvenience. Please provide details so I can address your concerns.", "I'm sorry to hear that. Let me assist you in resolving the issue.", "I understand your frustration. Let's work together to find a solution."],
+        "context_set": ""
+      },
+      {
+        "tag": "fallback",
+        "patterns": [],
+        "responses": ["I'm sorry, I didn't understand that. Could you please try again?", "I'm not sure I understand. Can you rephrase that?"],
+        "context_set": ""
+      }
+    ]
+  }
+  
