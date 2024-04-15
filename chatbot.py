@@ -2,39 +2,58 @@
 
 import json
 import random
-import re
 
-class EnterpriseChatbot:
-    def __init__(self, intents):
-        self.intents = intents
+# Load intents from JSON file
+with open('intents.json', 'r') as file:
+    intents = json.load(file)
 
-    def get_response(self, user_input):
-        for intent in self.intents['intents']:
-            for pattern in intent['patterns']:
-                # Use regular expression to match patterns with user input
-                # print("Matching pattern:", pattern)
-                if re.match(pattern.replace('[', '\[').replace(']', '\]').replace('product_name', '(.*)').replace('order_number', '(.*)'), user_input):
-                    responses = intent['responses']
-                    return random.choice(responses)
-        # Fallback response if no intent is matched
-        # print("No matching intent found.")
-        return random.choice(self.intents['intents'][-1]['responses'])
+# Function to handle user input
+def handle_input(user_input):
+    # Check if input matches any intent
 
+    # Convert user input to lowercase
+    user_input_lower = user_input.lower()
+    for intent in intents['intents']:
+        # Convert intent patterns to lowercase for comparison
+        for pattern in intent['patterns']:
+            if user_input_lower in pattern.lower():
+                return random.choice(intent['responses'])
 
-if __name__ == "__main__":
-    # Load intents from JSON
-    with open('intents.json', 'r') as file:
-        intents = json.load(file)
+    # If no matching intent found, handle unknown intent
+    return handle_unknown_intent(user_input)
 
-    # Initialize the chatbot
-    chatbot = EnterpriseChatbot(intents)
+# Function to handle unknown intent
+def handle_unknown_intent(user_input):
+    # Add unknown intent to intents.json file
+    new_intent = {
+        "tag": "unknown",
+        "patterns": [user_input],
+        "responses": ["I'm sorry, I didn't understand that."]
+    }
+    intents['intents'].append(new_intent)
 
-    # Chat loop
-    print("Chatbot: Hello! How can I assist you today?")
+    # Save updated intents to JSON file
+    with open('intents.json', 'w') as file:
+        json.dump(intents, file, indent=4)
+
+    return random.choice(new_intent['responses'])
+
+# Main function to simulate chat interaction
+def main():
+    print("Welcome to the HR chatbot!")
+    print("Type 'quit' to exit.")
+
     while True:
         user_input = input("You: ")
-        if user_input.lower() == 'quit':
-            print("Chatbot: Goodbye! Have a great day!")
+         # Check for exit signals
+        exit_signals = ["quit", "exit", "bye", "goodbye"]
+        exit_responses = ["Goodbye! Have a great day!", "See you later! Take care!", "Bye! Come back soon!", "Farewell! Have a wonderful day!", "Take care! See you soon!"]
+        if any(signal in user_input.lower() for signal in exit_signals):
+            print("Bot:", random.choice(exit_responses))
             break
-        response = chatbot.get_response(user_input)
-        print("Chatbot:", response)
+
+        response = handle_input(user_input)
+        print("Bot:", response)
+
+if __name__ == "__main__":
+    main()
