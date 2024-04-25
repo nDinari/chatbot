@@ -1,3 +1,3 @@
 # create_chatbot_using_python
-This code is an implementation of a simple chatbot using TensorFlow, which is a machine learning framework developed by Google. The chatbot is trained using a neural network to classify user inputs into predefined intents and provide appropriate responses based on the detected intent.
-The intents.json file is the data that we will provide to our chatbot 
+In the realm of computer information systems, the implementation of a pre-filled query chatbot offers a straightforward and effective means of communication. By eliminating the need for natural language processing, the application ensures precise responses, quick information retrieval, and enhanced user experience. The project aligns with the goal of providing users with instant access to relevant information within the specified domain.
+This document outlines the comprehensive plan for developing the pre-filled query chatbot application, addressing key aspects such as problem definition, objectives, scope, deliverables, methodology, resource requirements, risk assessment, and approval processes.
