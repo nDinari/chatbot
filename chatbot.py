@@ -1,59 +1,60 @@
-# chatbot.py
-
-import json
 import random
+import json
+import pickle
+import numpy as np
+import nltk
 
-# Load intents from JSON file
-with open('intents.json', 'r') as file:
-    intents = json.load(file)
+from nltk.stem import WordNetLemmatizer
+from keras.models import load_model
 
-# Function to handle user input
-def handle_input(user_input):
-    # Check if input matches any intent
+lemmatizer = WordNetLemmatizer()
+intents = json.loads(open('C:/Users/APPLE/Downloads/create_chatbot_using_python-main/intents.json').read())
 
-    # Convert user input to lowercase
-    user_input_lower = user_input.lower()
-    for intent in intents['intents']:
-        # Convert intent patterns to lowercase for comparison
-        for pattern in intent['patterns']:
-            if user_input_lower in pattern.lower():
-                return random.choice(intent['responses'])
+words = pickle.load(open('words.pkl', 'rb'))
+classes = pickle.load(open('classes.pkl', 'rb'))
+model = load_model('chatbot_model.h5')
 
-    # If no matching intent found, handle unknown intent
-    return handle_unknown_intent(user_input)
 
-# Function to handle unknown intent
-def handle_unknown_intent(user_input):
-    # Add unknown intent to intents.json file
-    new_intent = {
-        "tag": "unknown",
-        "patterns": [user_input],
-        "responses": ["I'm sorry, I didn't understand that."]
-    }
-    intents['intents'].append(new_intent)
+def clean_up_sentence(sentence):
+    sentence_words = nltk.word_tokenize(sentence)
+    sentence_words = [lemmatizer.lemmatize(word) for word in sentence_words]
+    return sentence_words
 
-    # Save updated intents to JSON file
-    with open('intents.json', 'w') as file:
-        json.dump(intents, file, indent=4)
+def bag_of_words (sentence):
+    sentence_words = clean_up_sentence(sentence)
+    bag = [0] * len(words)
+    for w in sentence_words:
+        for i, word in enumerate(words):
+            if word == w:
+                bag[i] = 1
+    return np.array(bag)
 
-    return random.choice(new_intent['responses'])
+def predict_class (sentence):
+    bow = bag_of_words (sentence)
+    res = model.predict(np.array([bow]))[0]
+    ERROR_THRESHOLD = 0.25
+    results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
 
-# Main function to simulate chat interaction
-def main():
-    print("Welcome to the HR chatbot!")
-    print("Type 'quit' to exit.")
+    results.sort(key=lambda x: x[1], reverse=True)
+    return_list = []
+    for r in results:
+        return_list.append({'intent': classes [r[0]], 'probability': str(r[1])})
+    return return_list
 
-    while True:
-        user_input = input("You: ")
-         # Check for exit signals
-        exit_signals = ["quit", "exit", "bye", "goodbye"]
-        exit_responses = ["Goodbye! Have a great day!", "See you later! Take care!", "Bye! Come back soon!", "Farewell! Have a wonderful day!", "Take care! See you soon!"]
-        if any(signal in user_input.lower() for signal in exit_signals):
-            print("Bot:", random.choice(exit_responses))
+def get_response(intents_list, intents_json):
+    tag = intents_list[0]['intent']
+    list_of_intents = intents_json['intents']
+    for i in list_of_intents:
+        if i['tag'] == tag:
+            result = random.choice (i['responses'])
             break
+    return result
 
-        response = handle_input(user_input)
-        print("Bot:", response)
+print("GO! Bot is running!")
 
-if __name__ == "__main__":
-    main()
+while True:
+    message = input("")
+    ints = predict_class (message)
+    res = get_response (ints, intents)
+    print (res)
+    
